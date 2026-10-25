@@ -22,11 +22,13 @@ export function ProfilePage() {
         </div>
       </div>
 
-      {!user.shopProfileComplete && (
-        <div className="rounded-lg border border-brand-light bg-brand-light/40 p-4 text-sm">
-          <div className="font-medium">Complete your shop profile</div>
-          Shop name, GSTIN and location are needed for delivery. This comes in the next update.
-        </div>
+      {user.shopProfileComplete ? (
+        <ShopCard />
+      ) : (
+        <Link to="/profile/shop" className="block rounded-lg border border-brand-light bg-brand-light/40 p-4 text-sm hover:border-brand">
+          <div className="font-medium">Complete your shop profile →</div>
+          Shop name, GSTIN and your shop's location on the map, needed for delivery.
+        </Link>
       )}
 
       <dl className="card divide-y divide-slate-100 text-sm">
@@ -65,5 +67,37 @@ export function ProfilePage() {
         </Button>
       </div>
     </div>
+  )
+}
+
+function ShopCard() {
+  const profile = useQuery({ queryKey: ['shop-profile'], queryFn: shopApi.shopProfile })
+  const p = profile.data
+  return (
+    <section className="card p-4 text-sm">
+      <div className="mb-1 flex items-center justify-between">
+        <h2 className="font-semibold">Shop</h2>
+        <Link to="/profile/shop" className="text-brand hover:underline">
+          Edit
+        </Link>
+      </div>
+      {p && (
+        <>
+          <div className="font-medium">{p.shopName}</div>
+          <div className="text-slate-600">{[p.address, `${p.city ?? ''} ${p.pincode ?? ''}`.trim()].filter(Boolean).join(', ')}</div>
+          {p.gstNumber && <div className="text-slate-600">GSTIN {p.gstNumber}</div>}
+          {p.lat !== null && p.lng !== null && (
+            <a
+              className="text-brand hover:underline"
+              href={`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lng}#map=18/${p.lat}/${p.lng}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View location on map
+            </a>
+          )}
+        </>
+      )}
+    </section>
   )
 }

@@ -93,8 +93,12 @@ export function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [justRegistered, setJustRegistered] = useState(false)
 
-  if (state.status === 'signed-in') return <Navigate to={target} replace />
+  // A new account fills in the shop profile next, then continues to where it was going.
+  if (state.status === 'signed-in') {
+    return <Navigate to={justRegistered ? `/profile/shop?from=${encodeURIComponent(target)}` : target} replace />
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -103,6 +107,7 @@ export function RegisterPage() {
     setError(null)
     if (Object.keys(problems).length > 0) return
     setBusy(true)
+    setJustRegistered(true)
     try {
       await register({
         fullName: form.fullName.trim(),
@@ -111,6 +116,7 @@ export function RegisterPage() {
         password: form.password,
       })
     } catch (e) {
+      setJustRegistered(false)
       if (e instanceof ApiError) {
         setErrors(e.fieldErrors)
         if (Object.keys(e.fieldErrors).length === 0) setError(e.message)

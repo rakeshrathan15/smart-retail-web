@@ -35,6 +35,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(async (input: RegisterInput) => signedIn(await shopApi.register(input)), [signedIn])
 
+  const refreshUser = useCallback(async () => setState({ status: 'signed-in', user: await shopApi.me() }), [])
+
   const logout = useCallback(async () => {
     const refreshToken = storedRefreshToken()
     clearTokens()
@@ -44,6 +46,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (refreshToken) await shopApi.logout(refreshToken).catch(() => {})
   }, [queryClient])
 
-  const value = useMemo(() => ({ state, login, register, logout }), [state, login, register, logout])
+  const value = useMemo(
+    () => ({ state, login, register, refreshUser, logout }),
+    [state, login, register, refreshUser, logout],
+  )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -187,3 +187,32 @@ export interface OrderDetail {
   createdAt: string
   items: { productId: string | null; productName: string; quantity: number; price: number; total: number }[]
 }
+
+// ---- Shop profile -----------------------------------------------------
+
+export interface ShopProfile {
+  shopName: string | null
+  ownerName: string | null
+  phone: string | null
+  gstNumber: string | null
+  address: string | null
+  city: string | null
+  state: string | null
+  pincode: string | null
+  lat: number | null
+  lng: number | null
+  complete: boolean
+}
+
+export interface ShopProfileInput {
+  shopName: string
+  ownerName: string
+  phone: string
+  gstNumber: string | null
+  address: string
+  city: string
+  state: string
+  pincode: string
+  lat: number
+  lng: number
+}

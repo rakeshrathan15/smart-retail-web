@@ -17,6 +17,8 @@ export interface AuthContextValue {
   state: AuthState
   login: (identifier: string, password: string) => Promise<void>
   register: (input: RegisterInput) => Promise<void>
+  /** Reloads the signed-in user, e.g. after the shop profile is completed. */
+  refreshUser: () => Promise<void>
   logout: () => Promise<void>
 }
 

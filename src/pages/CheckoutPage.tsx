@@ -5,6 +5,7 @@ import { shopApi, imageProblem } from '../api/shop'
 import type { PaymentMethod, Quote } from '../api/types'
 import { cart, couponCode, useCart } from '../cart/cart'
 import { useQuote } from '../cart/useQuote'
+import { useAuth } from '../auth/useAuth'
 import { OrderSummary } from '../components/OrderSummary'
 import { Button, ErrorBanner, Spinner } from '../components/ui'
 import { formatRupees } from '../lib/format'
@@ -14,6 +15,7 @@ import { Problems } from './CartPage'
 export function CheckoutPage() {
   const lines = useCart()
   const quote = useQuote()
+  const { state } = useAuth()
   const addresses = useQuery({ queryKey: ['addresses'], queryFn: shopApi.addresses })
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -104,6 +106,14 @@ export function CheckoutPage() {
         ← Back to cart
       </Link>
       <h1 className="text-2xl font-semibold">Checkout</h1>
+      {state.status === 'signed-in' && !state.user.shopProfileComplete && (
+        <Link
+          to="/profile/shop?from=%2Fcheckout"
+          className="block rounded-lg border border-brand-light bg-brand-light/40 p-3 text-sm hover:border-brand"
+        >
+          <span className="font-medium">Add your shop details and location →</span> It helps us deliver to the right place.
+        </Link>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-4">

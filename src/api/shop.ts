@@ -14,6 +14,8 @@ import type {
   ProductSort,
   PublicSettings,
   Quote,
+  ShopProfile,
+  ShopProfileInput,
   UserSummary,
 } from './types'
 
@@ -50,6 +52,8 @@ export const shopApi = {
     api<AuthResponse>('/api/auth/register', { method: 'POST', json: body }),
   logout: (refreshToken: string) => api<void>('/api/auth/logout', { method: 'POST', json: { refreshToken } }),
   me: () => api<UserSummary>('/api/me'),
+  shopProfile: () => api<ShopProfile>('/api/me/shop-profile'),
+  saveShopProfile: (body: ShopProfileInput) => api<ShopProfile>('/api/me/shop-profile', { method: 'PUT', json: body }),
 
   // Checkout
   quote: (items: CartItem[], couponCode: string | null) =>

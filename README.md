@@ -36,7 +36,8 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | `/login`, `/register` | No | Email or mobile + password; returns to the page you came from (e.g. checkout) |
 | `/checkout` | Yes | Address (add new), cash on delivery / UPI with screenshot / credit, note, place order |
 | `/orders`, `/orders/:id` | Yes | My orders and order tracking; `?placed=1` shows the "Order placed" page |
-| `/profile` | Yes | Details, addresses, sign out |
+| `/profile` | Yes | Details, shop card, addresses, sign out |
+| `/profile/shop` | Yes | Shop name, owner, GSTIN, address and a map pin (tap the map, drag the pin or use your location). Shown after registering, with "Skip for now" |
 
 On phones the site shows a bottom menu like the app; on laptops a top menu with search and the cart.
 
@@ -47,6 +48,8 @@ On phones the site shows a bottom menu like the app; on laptops a top menu with 
 - **Prices** (`src/cart/useQuote.ts`): every cart change asks the server (`POST /api/checkout/quote`), which also works for
   visitors who are not signed in. The order is sent with the total the user saw, so a price change is refused, not charged.
 - **Login** (`src/api/client.ts`, `src/auth/`): access token in memory, refresh token in localStorage, refreshed once on 401.
+- **Map** (`src/components/LocationPicker.tsx`): Leaflet with OpenStreetMap tiles, so no API key. For production traffic use
+  a tile provider (OSM's own servers are for light use only) or switch to Google Maps with a key.
 
 ## Layout
 
