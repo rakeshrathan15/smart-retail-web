@@ -1,0 +1,69 @@
+import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router'
+import { shopApi } from '../api/shop'
+import { useAuth } from '../auth/useAuth'
+import { Button } from '../components/ui'
+
+export function ProfilePage() {
+  const { state, logout } = useAuth()
+  const addresses = useQuery({ queryKey: ['addresses'], queryFn: shopApi.addresses })
+  if (state.status !== 'signed-in') return null
+  const user = state.user
+
+  return (
+    <div className="mx-auto max-w-2xl space-y-4">
+      <div className="flex items-center gap-4">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-light text-xl font-semibold text-brand" aria-hidden="true">
+          {(user.fullName ?? '?').charAt(0).toUpperCase()}
+        </span>
+        <div>
+          <h1 className="text-xl font-semibold">{user.fullName ?? 'Shop owner'}</h1>
+          <div className="text-sm text-slate-500">{user.roles.join(', ').toLowerCase()}</div>
+        </div>
+      </div>
+
+      {!user.shopProfileComplete && (
+        <div className="rounded-lg border border-brand-light bg-brand-light/40 p-4 text-sm">
+          <div className="font-medium">Complete your shop profile</div>
+          Shop name, GSTIN and location are needed for delivery. This comes in the next update.
+        </div>
+      )}
+
+      <dl className="card divide-y divide-slate-100 text-sm">
+        <div className="flex justify-between p-4">
+          <dt className="text-slate-500">Mobile</dt>
+          <dd>{user.phone ? `+91 ${user.phone}` : 'Not added'}</dd>
+        </div>
+        <div className="flex justify-between p-4">
+          <dt className="text-slate-500">Email</dt>
+          <dd>{user.email ?? 'Not added'}</dd>
+        </div>
+      </dl>
+
+      <section className="card p-4 text-sm">
+        <h2 className="mb-2 font-semibold">Delivery addresses</h2>
+        {addresses.data?.length === 0 && <p className="text-slate-500">None yet. You can add one at checkout.</p>}
+        <ul className="space-y-2">
+          {addresses.data?.map((a) => (
+            <li key={a.id}>
+              <span className="font-medium">
+                {a.label} · {a.fullName}
+              </span>
+              {a.isDefault && <span className="ml-2 text-xs text-green-700">Default</span>}
+              <div className="text-slate-600">{[a.addressLine1, a.addressLine2, `${a.city} ${a.pincode}`].filter(Boolean).join(', ')}</div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <div className="flex gap-3">
+        <Link to="/orders" className="rounded-md px-4 py-2 text-sm font-medium text-brand ring-1 ring-brand hover:bg-brand-light">
+          My orders
+        </Link>
+        <Button variant="danger" onClick={logout}>
+          Sign out
+        </Button>
+      </div>
+    </div>
+  )
+}
