@@ -9,6 +9,7 @@ import type {
   OrderSummary,
   Page,
   PaymentMethod,
+  MyDeliveryRoute,
   ProductCard,
   ProductDetail,
   ProductSort,
@@ -53,6 +54,7 @@ export const shopApi = {
   logout: (refreshToken: string) => api<void>('/api/auth/logout', { method: 'POST', json: { refreshToken } }),
   me: () => api<UserSummary>('/api/me'),
   shopProfile: () => api<ShopProfile>('/api/me/shop-profile'),
+  deliveryRoute: () => api<MyDeliveryRoute>('/api/me/delivery-route'),
   saveShopProfile: (body: ShopProfileInput) => api<ShopProfile>('/api/me/shop-profile', { method: 'PUT', json: body }),
 
   // Checkout

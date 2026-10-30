@@ -62,6 +62,8 @@ function ShopProfileEditor({ initial }: { initial: ShopProfile }) {
       queryClient.setQueryData(['shop-profile'], saved)
       // The first save also creates the default delivery address.
       queryClient.invalidateQueries({ queryKey: ['addresses'] })
+      // The new pin may put the shop on a different route.
+      queryClient.invalidateQueries({ queryKey: ['delivery-route'] })
       await refreshUser()
       navigate(onboarding ? safeFrom(from) : '/profile', { replace: true })
     },

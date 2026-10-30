@@ -111,4 +111,26 @@ describe('shop profile', () => {
     // Back to where the visitor was heading (the home page here).
     expect(await screen.findByRole('heading', { name: 'Shop by category' })).toBeInTheDocument()
   })
+
+  it('shows the delivery route and next delivery day on the profile', async () => {
+    fakeBackend({
+      ...catalogRoutes,
+      'POST /api/auth/login': () => ({ status: 200, body: { ...auth, user: { ...user, shopProfileComplete: true } } }),
+      'GET /api/me': () => ({ status: 200, body: { ...user, shopProfileComplete: true } }),
+      'GET /api/me/addresses': () => ({ status: 200, body: [] }),
+      'GET /api/me/shop-profile': () => ({ status: 200, body: { ...emptyProfile, shopName: 'Lakshmi Kirana', complete: true } }),
+      'GET /api/me/delivery-route': () => ({
+        status: 200,
+        body: { assigned: true, name: 'Warangal North', area: null, days: ['MON', 'THU'], nextDeliveryDate: '2026-11-05' },
+      }),
+    })
+    const ux = userEvent.setup()
+    renderApp('/login?from=%2Fprofile')
+    await ux.type(await screen.findByLabelText('Email or mobile'), '9876543210')
+    await ux.type(screen.getByLabelText('Password'), 'secret123')
+    await ux.click(screen.getByRole('button', { name: 'Sign in' }))
+    expect(await screen.findByText('Delivery route: Warangal North')).toBeInTheDocument()
+    expect(screen.getByText('Mon, Thu')).toBeInTheDocument()
+    expect(screen.getByText(/^Order today, delivered Thursday,? 5 Nov/)).toBeInTheDocument()
+  })
 })

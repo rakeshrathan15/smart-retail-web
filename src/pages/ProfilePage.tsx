@@ -96,8 +96,31 @@ function ShopCard() {
               View location on map
             </a>
           )}
+          <DeliveryRouteLine />
         </>
       )}
     </section>
+  )
+}
+
+const dayNames: Record<string, string> = { MON: 'Mon', TUE: 'Tue', WED: 'Wed', THU: 'Thu', FRI: 'Fri', SAT: 'Sat', SUN: 'Sun' }
+
+const deliveryDay = new Intl.DateTimeFormat('en-IN', { weekday: 'long', day: 'numeric', month: 'short', timeZone: 'UTC' })
+
+function DeliveryRouteLine() {
+  const route = useQuery({ queryKey: ['delivery-route'], queryFn: shopApi.deliveryRoute })
+  const r = route.data
+  if (!r) return null
+  if (!r.assigned) {
+    return <p className="mt-2 border-t border-slate-100 pt-2 text-slate-600">Your shop is not on a delivery route yet.</p>
+  }
+  return (
+    <div className="mt-2 border-t border-slate-100 pt-2">
+      <div className="font-medium">Delivery route: {r.name}</div>
+      {r.days.length > 0 && <div className="text-slate-600">{r.days.map((d) => dayNames[d] ?? d).join(', ')}</div>}
+      {r.nextDeliveryDate && (
+        <div className="text-slate-600">Order today, delivered {deliveryDay.format(new Date(`${r.nextDeliveryDate}T00:00:00Z`))}</div>
+      )}
+    </div>
   )
 }

@@ -36,7 +36,7 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | `/login`, `/register` | No | Email or mobile + password; returns to the page you came from (e.g. checkout) |
 | `/checkout` | Yes | Address (add new), cash on delivery / UPI with screenshot / credit, note, place order |
 | `/orders`, `/orders/:id` | Yes | My orders and order tracking; `?placed=1` shows the "Order placed" page |
-| `/profile` | Yes | Details, shop card, addresses, sign out |
+| `/profile` | Yes | Details, shop card with delivery route and next delivery day, addresses, sign out |
 | `/profile/shop` | Yes | Shop name, owner, GSTIN, address and a map pin (tap the map, drag the pin or use your location). Shown after registering, with "Skip for now" |
 
 On phones the site shows a bottom menu like the app; on laptops a top menu with search and the cart.

@@ -190,6 +190,15 @@ export interface OrderDetail {
 
 // ---- Shop profile -----------------------------------------------------
 
+/** The signed-in shop's delivery route, from /api/me/delivery-route. */
+export interface MyDeliveryRoute {
+  assigned: boolean
+  name: string | null
+  area: string | null
+  days: string[]
+  nextDeliveryDate: string | null
+}
+
 export interface ShopProfile {
   shopName: string | null
   ownerName: string | null
