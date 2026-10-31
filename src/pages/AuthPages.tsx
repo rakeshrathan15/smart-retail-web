@@ -10,7 +10,7 @@ function AuthCard({ title, subtitle, children }: { title: string; subtitle: stri
     <div className="mx-auto max-w-sm py-6">
       <div className="card space-y-4 p-6">
         <div className="text-center">
-          <img src="/favicon.svg" alt="" className="mx-auto mb-2 h-12 w-12" />
+          <img src="/favicon.png" alt="" className="mx-auto mb-2 h-12 w-12" />
           <h1 className="text-xl font-semibold">{title}</h1>
           <p className="text-sm text-slate-500">{subtitle}</p>
         </div>

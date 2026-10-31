@@ -28,7 +28,7 @@ export function Layout() {
       <header className="sticky top-0 z-20 bg-brand text-white shadow">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
           <Link to="/" className="flex shrink-0 items-center gap-2">
-            <img src="/favicon.svg" alt="" className="h-8 w-8" />
+            <img src="/favicon.png" alt="" className="h-8 w-8" />
             <span className="font-semibold">{storeName}</span>
           </Link>
           <form onSubmit={submitSearch} role="search" className="hidden flex-1 md:block">
