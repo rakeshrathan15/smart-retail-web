@@ -140,7 +140,7 @@ describe('website', () => {
       ...catalogRoutes,
       'GET /api/me': () => ({ status: 200, body: user }),
       'GET /api/me/addresses': () => ({ status: 200, body: [address] }),
-      'POST /api/orders': () => ({ status: 409, body: { detail: 'Only 3 cases of Thums Up 750ml PET are left.' } }),
+      'POST /api/orders': () => ({ status: 409, body: { message: 'Only 3 cases of Thums Up 750ml PET are left.' } }),
     })
     const ux = userEvent.setup()
     renderApp('/checkout')
